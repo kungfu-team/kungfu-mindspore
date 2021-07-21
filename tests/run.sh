@@ -3,8 +3,11 @@ set -e
 
 cd $(dirname $0)
 . ../ld_library_path.sh
-export LD_LIBRARY_PATH=$(ld_library_path ../mindspore)
+export LD_LIBRARY_PATH=$(ld_library_path $PWD/../mindspore)
 . ../scripts/launcher.sh
+
+pwd
+echo $LD_LIBRARY_PATH
 
 kungfu_run_flags() {
     echo -q
@@ -29,10 +32,17 @@ test_allreduce_op() {
     kungfu_run python3.7 test_allreduce_op.py --device $device --dtype f32
 }
 
-test_all() {
+test_allgather_op() {
+    local device=$1
+    kungfu_run python3.7 test_allgather_op.py --device $device --dtype i32
+    kungfu_run python3.7 test_allgather_op.py --device $device --dtype f32
+}
+
+test_all_ops() {
     local device=$1
     test_broadcast_op $device
     test_allreduce_op $device
+    test_allgather_op $device
 }
 
 test_import() {
@@ -45,7 +55,7 @@ test_dataset() {
 
 }
 
-# test_all CPU
-# test_all GPU
+# test_all_ops CPU
+test_all_ops GPU
 # test_import
-test_dataset
+# test_dataset

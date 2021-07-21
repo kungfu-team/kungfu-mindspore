@@ -1,0 +1,17 @@
+diff --git a/mindspore/ccsrc/backend/kernel_compiler/CMakeLists.txt b/mindspore/ccsrc/backend/kernel_compiler/CMakeLists.txt
+index 8eb5026f97..884f4af882 100644
+--- a/mindspore/ccsrc/backend/kernel_compiler/CMakeLists.txt
++++ b/mindspore/ccsrc/backend/kernel_compiler/CMakeLists.txt
+@@ -68,6 +68,12 @@ if(ENABLE_CPU)
+     endif()
+ endif()
+ 
++if ($ENV{ENABLE_KUNGFU})
++    file(GLOB_RECURSE KUNGFU_CPU_SRC_LIST RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "cpu/kungfu/*.cc")
++    list(APPEND CPU_SRC_LIST ${KUNGFU_CPU_SRC_LIST})
++endif()
++
++
+ if(NOT ENABLE_CPU OR WIN32)
+     list(REMOVE_ITEM CPU_SRC_LIST "cpu/ps/apply_momentum_ps_kernel.cc")
+     list(REMOVE_ITEM CPU_SRC_LIST "cpu/ps/embedding_look_up_proxy_kernel.cc")

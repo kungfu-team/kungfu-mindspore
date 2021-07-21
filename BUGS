@@ -1,0 +1,19 @@
+ $ ldd  /home/lg/.local/lib/python3.7/site-packages/mindspore/_c_expression.cpython-37m-x86_64-linux-gnu.so| grep kungfu
+	libkungfu.so => not found
+lg@platypus2 ~/code/repos/github.com/kungfu-ml/kungfu-mindspore $ find mindspore/| grep libkungfu.so
+mindspore/third_party/kungfu/lib/libkungfu.so
+mindspore/KungFu/lib/libkungfu.so
+
+
+
+/home/lg/code/repos/github.com/kungfu-ml/kungfu-mindspore/tests/../mindspore/third_party/kungfu/lib:/home/lg/code/repos/github.com/kungfu-ml/kungfu-mindspore/tests/../mindspore/mindspore/lib:/home/lg/code/repos/github.com/kungfu-ml/kungfu-mindspore/tests/../mindspore/build/mindspore/_deps/ompi-src/ompi/.libs:/home/lg/code/repos/github.com/kungfu-ml/kungfu-mindspore/tests/../mindspore/build/mindspore/_deps/nccl-src/build/lib
+
+
+/home/lg/code/repos/github.com/kungfu-ml/kungfu-mindspore/tests/../mindspore/third_party/kungfu/lib
+/home/lg/code/repos/github.com/kungfu-ml/kungfu-mindspore/tests/../mindspore/mindspore/lib
+/home/lg/code/repos/github.com/kungfu-ml/kungfu-mindspore/tests/../mindspore/build/mindspore/_deps/ompi-src/ompi/.libs
+/home/lg/code/repos/github.com/kungfu-ml/kungfu-mindspore/tests/../mindspore/build/mindspore/_deps/nccl-src/build/lib
+
+
+nm /home/lg/code/repos/github.com/kungfu-ml/kungfu-mindspore/tests/../mindspore/third_party/kungfu/lib/libkungfu.so | c++filt
+_kungfu_peer

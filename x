@@ -17,7 +17,7 @@ cd $(dirname $0)
 ### example
 #
 # ./examples/lenet/run.sh
-./examples/mnist-lenet-elastic/run.sh
+# ./examples/mnist-lenet-elastic/run.sh
 # ./examples/resnet-elastic/train_single.sh
 # ./examples/resnet-elastic/train_parallel_kungfu.sh
 # ./examples/resnet-elastic/train_parallel_kungfu_elastic.sh
@@ -51,3 +51,7 @@ cd $(dirname $0)
 ### official examples
 
 # ./examples/official/train-resnet50-cifar10.sh
+
+#############
+### run tests
+./tests/run.sh

@@ -19,6 +19,16 @@ class KungFuAllReduce(PrimitiveWithInfer):
         return x
 
 
+class KungFuAllGather(PrimitiveWithInfer):
+    @prim_attr_register
+    def __init__(self):
+        self.init_prim_io_names(inputs=['x'], outputs=['y'])
+
+    def infer_shape(self, x):
+        dims = x
+        return dims
+
+
 class KungFuBroadcast(PrimitiveWithInfer):
     @prim_attr_register
     def __init__(self):
