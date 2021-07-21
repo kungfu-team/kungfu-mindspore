@@ -21,7 +21,6 @@ class KungFuAllGatherGpuKernel : public GpuKernel
     KungFuAllGatherGpuKernel()
         : nccl_controller_(nullptr),
           nccl_scheduler_(nullptr),
-          reduce_op_(KungFu_SUM),
           comm_stream_(nullptr),
           input_count_(0),
           output_count_(0),
@@ -85,7 +84,6 @@ class KungFuAllGatherGpuKernel : public GpuKernel
         LOG_InitKernel("KungFuAllReduceGpuKernel");
         KUNGFU_PROFILE_SITE(KungFuAllReduceGpuKernel::Init);
 
-        InitOp(kernel_node);
         InitResource();
         data_type_ = GetCudnnDataType(
             TypeIdLabel(AnfAlgo::GetInputDeviceDataType(kernel_node, 0)));
@@ -138,28 +136,6 @@ class KungFuAllGatherGpuKernel : public GpuKernel
     }
 
   private:
-    void InitOp(const CNodePtr &kernel_node)
-    {
-        auto reduce_op =
-            AnfAlgo::GetCNodePrimitive(kernel_node)->GetAttr(kAttrOp);
-        if (reduce_op) {
-            std::string op_name = GetValue<std::string>(reduce_op);
-            static std::map<std::string, KungFu_Op> _name_to_op({
-                {"sum", KungFu_SUM},
-                {"min", KungFu_MIN},
-                {"max", KungFu_MAX},
-                {"prod", KungFu_PROD},
-            });
-            auto it = _name_to_op.find(op_name);
-            if (it == _name_to_op.end()) {
-                MS_LOG(EXCEPTION)
-                    << "reduce op " << op_name << " is not supported.";
-            } else {
-                reduce_op_ = it->second;
-            }
-        }
-    }
-
     void DestroyResource() noexcept
     {
     }
@@ -179,7 +155,6 @@ class KungFuAllGatherGpuKernel : public GpuKernel
     kungfu::NCCLController *nccl_controller_;
     kungfu::NCCLScheduler *nccl_scheduler_;
 
-    KungFu_Op reduce_op_;
     cudaStream_t comm_stream_;
     cudnnDataType_t data_type_;
     std::string group_name_;

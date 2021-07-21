@@ -24,8 +24,15 @@ class KungFuAllGather(PrimitiveWithInfer):
     def __init__(self):
         self.init_prim_io_names(inputs=['x'], outputs=['y'])
 
+    def infer_dtype(self, x):
+        return x
+
     def infer_shape(self, x):
-        dims = x
+        # print('KungFuAllGather::infer_shape %s' % (x))
+        size = kungfu_current_cluster_size()
+        dims = [size]
+        dims.extend(x)
+        # print('KungFuAllGather::infer_shape %s' % (dims))
         return dims
 
 

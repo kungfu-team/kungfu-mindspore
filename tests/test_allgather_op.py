@@ -37,6 +37,7 @@ def main():
 
     x = ms.Tensor(np.array([value] * size).astype(dtype))
     print('x=%s' % (x))
+
     y = allgather(x)
     print('y=%s' % (y))
 
