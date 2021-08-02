@@ -19,6 +19,15 @@ class KungFuAllReduce(PrimitiveWithInfer):
         return x
 
 
+class KungFuSubsetAllReduce(PrimitiveWithInfer):
+    @prim_attr_register
+    def __init__(self, op=ReduceOp.SUM):
+        self.init_prim_io_names(inputs=['x', 't'], outputs=['y'])
+
+    def __infer__(self, x, _t):
+        return x
+
+
 class KungFuAllGather(PrimitiveWithInfer):
     @prim_attr_register
     def __init__(self):

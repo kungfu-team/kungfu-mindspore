@@ -54,4 +54,6 @@ cd $(dirname $0)
 
 #############
 ### run tests
+export KUNGFU_MINDSPORE_DEBUG=1
+export NCCL_DEBUG=DEBUG
 ./tests/run.sh

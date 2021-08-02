@@ -38,11 +38,18 @@ test_allgather_op() {
     kungfu_run python3.7 test_allgather_op.py --device $device --dtype f32
 }
 
+test_subset_allreduce_op() {
+    local device=$1
+    kungfu_run python3.7 test_subset_allreduce.py --device $device --dtype i32
+    kungfu_run python3.7 test_subset_allreduce.py --device $device --dtype f32
+}
+
 test_all_ops() {
     local device=$1
-    test_broadcast_op $device
-    test_allreduce_op $device
-    test_allgather_op $device
+    # test_broadcast_op $device
+    # test_allreduce_op $device
+    # test_allgather_op $device
+    test_subset_allreduce_op $device
 }
 
 test_import() {
