@@ -2,6 +2,7 @@
 #include <map>
 #include <string>
 #include <vector>
+#include <iostream>
 
 #include "backend/kernel_compiler/cpu/kungfu/kungfu_common.h"
 #include "backend/kernel_compiler/gpu/gpu_kernel.h"
@@ -19,7 +20,7 @@ class KungFuClusterSizeGpuKernel : public GpuKernel
 {
   public:
     KungFuClusterSizeGpuKernel()
-          input_size_(0),
+        : input_size_(0),
           output_size_(0),
           workspace_size_(0)
     {
@@ -51,13 +52,23 @@ class KungFuClusterSizeGpuKernel : public GpuKernel
 
         int cluster_size = _kungfu_peer->Size();
         T *output_addr = GetDeviceAddress<T>(outputs, 0);
-        *output_addr = cluster_size;
+        cudaMemcpyAsync(output_addr, &cluster_size, sizeof(int), cudaMemcpyHostToDevice, reinterpret_cast<cudaStream_t>(stream_ptr));
 
         return true;
     }
 
     bool Init(const CNodePtr &kernel_node) override
     {
+        size_t output_num = AnfAlgo::GetOutputTensorNum(kernel_node);
+        if (output_num != 1) {
+            MS_LOG(ERROR) << "Output number is " << output_num << ", but KungFuClusterSize needs 1 output.";
+            return false;
+        }
+
+        input_size_ = 0;
+        output_size_ = sizeof(T);
+        workspace_size_ = 0;
+
         InitSizeLists();
 
         return true;
@@ -68,6 +79,7 @@ class KungFuClusterSizeGpuKernel : public GpuKernel
     {
         input_size_list_.push_back(input_size_);
         output_size_list_.push_back(output_size_);
+        workspace_size_list_.push_back(workspace_size_);
         return;
     }
 

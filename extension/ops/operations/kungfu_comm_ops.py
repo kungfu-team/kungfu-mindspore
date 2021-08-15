@@ -87,6 +87,9 @@ class KungFuClusterSize(PrimitiveWithInfer):
     def __init__(self):
         self.init_prim_io_names(inputs=[], outputs=["size"])
 
+    def infer_shape(self, *args):
+        return []
+
     def infer_dtype(self, *args):
         return mstype.int32
 
