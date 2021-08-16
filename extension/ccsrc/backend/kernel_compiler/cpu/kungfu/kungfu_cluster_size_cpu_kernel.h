@@ -20,7 +20,8 @@ class KungFuClusterSizeCpuKernel : public CPUKernel
 
     void InitKernel(const CNodePtr &kernel_node) override
     {
-        LOG_InitKernel("KungFuClusterSizeCpuKernel");
+        output_size_ = sizeof(T);
+        output_size_list_.push_back(output_size_);
     }
 
     bool Launch(const std::vector<AddressPtr> &inputs,
@@ -41,6 +42,10 @@ class KungFuClusterSizeCpuKernel : public CPUKernel
 
         return true;
     }
+
+  private:
+    std::vector<size_t> output_size_list_;
+    size_t output_size_;
 };
 }  // namespace kernel
 }  // namespace   mindspore
