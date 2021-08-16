@@ -94,7 +94,6 @@ class KungFuClusterSize(PrimitiveWithInfer):
         return mstype.float32
 
 
-
 from ..._c_expression import kungfu_debug_nccl
 
 

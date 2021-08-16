@@ -78,9 +78,9 @@ class KungFuClusterSizeGpuKernel : public GpuKernel
   protected:
     void InitSizeLists() override
     {
-        input_size_list_.push_back(input_size_);
+        // input_size_list_.push_back(input_size_);
         output_size_list_.push_back(output_size_);
-        workspace_size_list_.push_back(workspace_size_);
+        // workspace_size_list_.push_back(workspace_size_);
         return;
     }
 

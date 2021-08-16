@@ -15,14 +15,12 @@ template <typename T>
 class KungFuClusterSizeCpuKernel : public CPUKernel
 {
   public:
-    KungFuClusterSizeCpuKernel()
-    {
-    }
+    KungFuClusterSizeCpuKernel() = default;
     ~KungFuClusterSizeCpuKernel() override = default;
 
     void InitKernel(const CNodePtr &kernel_node) override
     {
-        LOG_InitKernel("KungFuClusterSizeCPUKernel");
+        LOG_InitKernel("KungFuClusterSizeCpuKernel");
     }
 
     bool Launch(const std::vector<AddressPtr> &inputs,
@@ -32,8 +30,11 @@ class KungFuClusterSizeCpuKernel : public CPUKernel
         std::unique_ptr<kungfu::Peer> _kungfu_peer;
 
         int cluster_size = _kungfu_peer->Size();
+        MS_LOG(WARNING) << "A";
         T cluster_size_T = (T) cluster_size;
+        MS_LOG(WARNING) << "B";
         T *output_addr = reinterpret_cast<T*>(outputs.at(0)->addr);
+        MS_LOG(WARNING) << "C";
         std::memcpy(output_addr, &cluster_size_T, sizeof(int));
 
         MS_LOG(WARNING) << "CPU CPU CPU";
