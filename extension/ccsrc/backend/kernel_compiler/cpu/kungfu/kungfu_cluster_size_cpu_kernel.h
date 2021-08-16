@@ -31,10 +31,12 @@ class KungFuClusterSizeCpuKernel : public CPUKernel
     {
         std::unique_ptr<kungfu::Peer> _kungfu_peer;
 
-        // int cluster_size = _kungfu_peer->Size();
-        // MS_LOG(WARNING) << "Cluster size " << cluster_size;
-        // const void *output_addr = outputs.at(0)->addr;
-        // memcpy(output_addr, &cluster_size, sizeof(int)); // FIXME: not working
+        int cluster_size = _kungfu_peer->Size();
+        T cluster_size_T = (T) cluster_size;
+        T *output_addr = reinterpret_cast<T*>(outputs.at(0)->addr);
+        std::memcpy(output_addr, &cluster_size_T, sizeof(int));
+
+        MS_LOG(WARNING) << "CPU CPU CPU";
 
         return true;
     }

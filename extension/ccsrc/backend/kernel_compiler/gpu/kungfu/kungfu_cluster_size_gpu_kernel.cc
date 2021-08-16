@@ -8,7 +8,7 @@ namespace kernel
 MS_REG_GPU_KERNEL_ONE(
     KungFuClusterSize,
     KernelAttr().AddOutputAttr(kNumberTypeInt32),
-    KungFuClusterSizeGpuKernel, int)
+    KungFuClusterSizeGpuKernel, int32_t)
 
 MS_REG_GPU_KERNEL_ONE(
     KungFuClusterSize,

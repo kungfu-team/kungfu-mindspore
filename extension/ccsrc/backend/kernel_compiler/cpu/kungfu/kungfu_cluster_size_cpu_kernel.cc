@@ -7,7 +7,7 @@ namespace kernel
 MS_REG_CPU_KERNEL_T(
     KungFuClusterSize,
     KernelAttr().AddOutputAttr(kNumberTypeInt32),
-    KungFuClusterSizeCpuKernel, int)
+    KungFuClusterSizeCpuKernel, int32_t)
 
 MS_REG_CPU_KERNEL_T(
     KungFuClusterSize,

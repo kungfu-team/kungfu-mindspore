@@ -51,8 +51,9 @@ class KungFuClusterSizeGpuKernel : public GpuKernel
         std::unique_ptr<kungfu::Peer> _kungfu_peer;
 
         int cluster_size = _kungfu_peer->Size();
+        T cluster_size_T = (T) cluster_size;
         T *output_addr = GetDeviceAddress<T>(outputs, 0);
-        cudaMemcpyAsync(output_addr, &cluster_size, sizeof(int), cudaMemcpyHostToDevice, reinterpret_cast<cudaStream_t>(stream_ptr));
+        cudaMemcpyAsync(output_addr, &cluster_size_T, sizeof(int), cudaMemcpyHostToDevice, reinterpret_cast<cudaStream_t>(stream_ptr));
 
         return true;
     }
