@@ -9,10 +9,5 @@ MS_REG_GPU_KERNEL_ONE(
     KungFuClusterSize,
     KernelAttr().AddOutputAttr(kNumberTypeInt32),
     KungFuClusterSizeGpuKernel, int32_t)
-
-MS_REG_GPU_KERNEL_ONE(
-    KungFuClusterSize,
-    KernelAttr().AddOutputAttr(kNumberTypeFloat32),
-    KungFuClusterSizeGpuKernel, float)
 }  // namespace kernel
 }  // namespace   mindspore
