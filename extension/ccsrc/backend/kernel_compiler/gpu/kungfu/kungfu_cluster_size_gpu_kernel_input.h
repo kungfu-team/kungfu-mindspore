@@ -16,17 +16,17 @@ namespace mindspore
 namespace kernel
 {
 template <typename T>
-class KungFuClusterSizeGpuKernel : public GpuKernel
+class KungFuClusterSizeInputGpuKernel : public GpuKernel
 {
   public:
-    KungFuClusterSizeGpuKernel()
+    KungFuClusterSizeInputGpuKernel()
         : input_size_(0),
           output_size_(0),
           workspace_size_(0)
     {
     }
 
-    ~KungFuClusterSizeGpuKernel() override = default;
+    ~KungFuClusterSizeInputGpuKernel() override = default;
 
     const std::vector<size_t> &GetInputSizeList() const override
     {
@@ -66,7 +66,7 @@ class KungFuClusterSizeGpuKernel : public GpuKernel
             return false;
         }
 
-        input_size_ = 0;
+        input_size_ = sizeof(T);
         output_size_ = sizeof(T);
         workspace_size_ = 0;
 
@@ -78,7 +78,7 @@ class KungFuClusterSizeGpuKernel : public GpuKernel
   protected:
     void InitSizeLists() override
     {
-        // input_size_list_.push_back(input_size_);
+        input_size_list_.push_back(input_size_);
         output_size_list_.push_back(output_size_);
         // workspace_size_list_.push_back(workspace_size_);
         return;
