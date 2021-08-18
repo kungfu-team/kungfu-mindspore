@@ -91,6 +91,29 @@ class KungFuContext:
         finalize(self._device)
 
 
+class KungFuClusterSize(PrimitiveWithInfer):
+    @prim_attr_register
+    def __init__(self):
+        self.init_prim_io_names(inputs=[], outputs=["cluster_size"])
+
+    def infer_shape(self, *args):
+        return ()
+
+    def infer_dtype(self, *args):
+        return mstype.int32
+
+class KungFuClusterSizeInput(PrimitiveWithInfer):
+    @prim_attr_register
+    def __init__(self):
+        self.init_prim_io_names(inputs=["x"], outputs=["cluster_size"])
+
+    def infer_shape(self, *args):
+        return ()
+
+    def infer_dtype(self, x_dtype):
+        return x_dtype
+
+
 from ..._c_expression import kungfu_debug_nccl
 
 
