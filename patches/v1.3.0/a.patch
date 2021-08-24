@@ -7,7 +7,7 @@ index 0b61c1987f..252e053ae1 100644
  include_directories(${CMAKE_CURRENT_SOURCE_DIR}/third_party/flatbuffers/include)
  include_directories(${CMAKE_CURRENT_SOURCE_DIR}/third_party/flatbuffers/include/flatbuffers)
 +include_directories(${CMAKE_CURRENT_SOURCE_DIR}/third_party/kungfu/include)
- 
+
  include(${CMAKE_SOURCE_DIR}/cmake/dependency_utils.cmake)
  find_package(Python3 COMPONENTS Interpreter Development)
 diff --git a/mindspore/ccsrc/CMakeLists.txt b/mindspore/ccsrc/CMakeLists.txt
@@ -20,16 +20,17 @@ index 76a50095e9..dd2ca92ac5 100644
  include_directories(${CMAKE_SOURCE_DIR}/mindspore/core/mindrt/src)
 -
 +link_directories(${CMAKE_SOURCE_DIR}/third_party/kungfu/lib)
- 
+
  set(SERVER_FLATBUFFER_OUTPUT "${CMAKE_BINARY_DIR}/schema")
  set(FBS_FILES
 @@ -429,3 +429,12 @@ if(MODE_ASCEND_ALL)
  endif()
- 
+
  add_subdirectory(cxx_api)
 +
 +if ($ENV{ENABLE_KUNGFU})
 +    target_link_libraries(mindspore kungfu)
++    target_link_libraries(mindspore kungfu_python)
 +    if (ENABLE_GPU)
 +        target_link_libraries(mindspore kungfu_nccl)
 +        target_link_libraries(mindspore mindspore::nccl)
