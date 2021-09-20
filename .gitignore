@@ -5,3 +5,6 @@ cuda_meta_*
 *.meta
 *.dat
 *.npz
+*.idx.txt
+*.tf_record
+*.list.txt

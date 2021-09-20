@@ -6,6 +6,9 @@ set -e
 cd $(dirname $0)
 . ./debug_options.sh
 
+. ./ld_library_path.sh
+export LD_LIBRARY_PATH=$(ld_library_path $PWD/mindspore)
+
 #############
 ### debug
 #
@@ -56,4 +59,6 @@ cd $(dirname $0)
 ### run tests
 export KUNGFU_MINDSPORE_DEBUG=1
 export NCCL_DEBUG=DEBUG
-./tests/run.sh
+# ./tests/run.sh
+
+./backup/2021-09-20/run_squad_elastic.sh
