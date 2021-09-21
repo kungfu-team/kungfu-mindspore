@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 
-# export CUDA_VISIBLE_DEVICES=2,3
+export CUDA_VISIBLE_DEVICES=2,3
 
 cd $(dirname $0)
 . ./debug_options.sh
@@ -57,8 +57,6 @@ export LD_LIBRARY_PATH=$(ld_library_path $PWD/mindspore)
 
 #############
 ### run tests
-export KUNGFU_MINDSPORE_DEBUG=1
-export NCCL_DEBUG=DEBUG
 # ./tests/run.sh
 
 ./backup/2021-09-20/run_squad_elastic.sh

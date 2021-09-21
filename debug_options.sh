@@ -5,6 +5,7 @@ export PYTHONPATH=$PWD/srcs/python
 
 # export NCCL_DEBUG=INFO
 
+# export KUNGFU_CONFIG_LOG_LEVEL=debug
 # export KUNGFU_MINDSPORE_DEBUG=true
 # export KUNGFU_USE_NCCL_SCHEDULER=true
 

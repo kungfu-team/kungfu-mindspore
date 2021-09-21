@@ -17,3 +17,6 @@ mindspore/KungFu/lib/libkungfu.so
 
 nm /home/lg/code/repos/github.com/kungfu-ml/kungfu-mindspore/tests/../mindspore/third_party/kungfu/lib/libkungfu.so | c++filt
 _kungfu_peer
+
+
+program not crash but hangs when called on nullptr

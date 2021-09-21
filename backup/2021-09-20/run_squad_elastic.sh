@@ -11,7 +11,7 @@ echo "ROOT=$ROOT"
 cd $(dirname $0)/bert
 echo "PWD: $PWD"
 
-export CUDA_VISIBLE_DEVICES=0,1,2,3
+# export CUDA_VISIBLE_DEVICES=0,1,2,3
 
 mkdir -p ms_log
 CUR_DIR=$(pwd)

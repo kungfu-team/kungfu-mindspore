@@ -56,6 +56,7 @@ void kungfu_nccl_init()
     auto nccl_scheduler = _kungfu_nccl_helper->EnsureScheduler(nccl_scope);
     auto nccl_controller = _kungfu_nccl_helper->EnsureController(nccl_scope);
     kungfu::Peer *peer = _kungfu_peer.get();
+    fprintf(stderr, "using _kungfu_peer=%p\n", peer);
     if (kungfu_use_nccl_scheduler) {
         nccl_scheduler->Do(
             [&] { KF_LOG_CALL(nccl_controller->InitOnce(peer)); });
