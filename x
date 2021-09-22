@@ -59,4 +59,5 @@ export LD_LIBRARY_PATH=$(ld_library_path $PWD/mindspore)
 ### run tests
 # ./tests/run.sh
 
-./backup/2021-09-20/run_squad_elastic.sh
+# ./backup/2021-09-20/run_squad_elastic.sh
+./experiments/midterm/run-all.sh
