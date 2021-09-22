@@ -8,3 +8,4 @@ cuda_meta_*
 *.idx.txt
 *.tf_record
 *.list.txt
+summary*

@@ -1,7 +1,8 @@
 #!/bin/sh
 set -e
 
-export CUDA_VISIBLE_DEVICES=2,3
+export CUDA_VISIBLE_DEVICES=0,1,2,3
+# export CUDA_VISIBLE_DEVICES=2,3
 
 cd $(dirname $0)
 . ./debug_options.sh
