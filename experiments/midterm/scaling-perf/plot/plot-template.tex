@@ -1,0 +1,40 @@
+\def\myaddplot#1#2#3{
+    \addplot[
+        color=#1,
+        mark=#2,
+    ] table {#3};
+}
+
+\def\Simpleplot#1#2{
+    \begin{tikzpicture}
+        \begin{axis}[
+            title={#1},
+            xlabel={\# nodes},
+            ylabel={#1},
+            % xmin=1,
+            % xmax=16,
+            % ymin=0,
+            % ymax=1.0,
+            % xtick={1, 2, 3},
+            % major tick num=1,
+            % minor x tick num=1,
+            % xtick distance=4,
+            legend pos=south east,
+            % major tick num=10,
+            % minor y tick num=5,
+            % ymajorgrids=true,
+            % grid style=dashed,
+            legend cell align={right},
+            ]
+            #2
+        \end{axis}
+    \end{tikzpicture}
+}
+
+\def\SingleFigFrame#1{
+    \begin{frame}
+        \begin{figure}
+            #1
+        \end{figure}
+    \end{frame}
+}

@@ -1,0 +1,21 @@
+\documentclass{beamer}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{pgfplots}
+
+\input{plot-template}
+
+\begin{document}
+
+\SingleFigFrame{
+    \Simpleplot{latency}{
+        \myaddplot{red}{square}    {data/scale-in.txt}
+        \myaddplot{red}{square}    {data/scale-out.txt}
+        \legend{
+            "scale in",
+            "scale out",
+        }
+    }
+}
+
+\end{document}

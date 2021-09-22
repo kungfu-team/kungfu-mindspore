@@ -40,6 +40,9 @@ class ElasticScheduleCallback(ms.train.callback.Callback):
         if self._rank == 0 and self._es._progress > 0:
             self._step = read_step(self._es)
 
+        if self._rank == 0:
+            print('starting from step %d' % (self._step))
+
     def begin(self, run_context):
         pass
 
@@ -50,7 +53,8 @@ class ElasticScheduleCallback(ms.train.callback.Callback):
         pass
 
     def step_begin(self, run_context):
-        pass
+        if self._rank == 0:
+            print('running step %d' % (self._step))
 
     def step_end(self, run_context):
         self._step += 1
@@ -63,5 +67,4 @@ class ElasticScheduleCallback(ms.train.callback.Callback):
     def end(self, run_context):
         if self._rank == 0:
             save_step(self._es, self._step)
-
-        pass
+            print('stopping at step %d' % (self._step))

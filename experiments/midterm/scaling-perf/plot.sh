@@ -1,4 +1,5 @@
 #!/bin/sh
 set -e
 
-pwd
+cd $(dirname $0)/plot
+pdflatex plot-all.tex
