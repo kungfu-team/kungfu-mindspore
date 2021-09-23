@@ -80,6 +80,7 @@ app_flags() {
     fi
 }
 
+# SCRIPT=log-env.py
 SCRIPT=run_squad_scaling_convergence.py
 
 main() {

@@ -13,6 +13,9 @@ schedule = {
     100: 0,
 }
 
+import os
+import time
+
 import mindspore as ms
 from kungfu.python import current_rank, propose_new_size
 
@@ -44,6 +47,9 @@ class ElasticScheduleCallback(ms.train.callback.Callback):
         if self._rank == 0:
             print('starting from step %d' % (self._step))
 
+        self._proc_start = int(os.getenv('KUNGFU_PROC_START_TIMESTAMP'))
+        self._local_step = 0
+
     def begin(self, run_context):
         pass
 
@@ -57,8 +63,22 @@ class ElasticScheduleCallback(ms.train.callback.Callback):
         if self._rank == 0:
             print('running step %d' % (self._step))
 
+        if self._rank == 0 and self._local_step == 0:
+            d = time.time() - self._proc_start
+            print('first step BEGIN after reload took %.fs' % (d))
+
+        self._step_begin_ts = time.time()
+
     def step_end(self, run_context):
+        step_took = time.time() - self._step_begin_ts
+
         self._step += 1
+        self._local_step += 1
+        if self._rank == 0:
+            if self._local_step == 1:
+                d = time.time() - self._proc_start
+                print('first step END after reload took %.fs' % (d))
+            print('local step %d took %.fs' % (self._local_step, step_took))
 
         if self._step in self._schedule:
             if current_rank() == 0:
