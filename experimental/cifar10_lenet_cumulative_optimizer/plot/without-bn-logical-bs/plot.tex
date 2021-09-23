@@ -25,7 +25,7 @@
         % xmax=16,
         % ymin=0,
         % ymax=1.0,
-        ymax=2.0, % for legend space
+        ymax=1.0, % for legend space
         % xtick={1, 2, 3},
     	% major tick num=1,
     	% minor x tick num=1,
@@ -39,20 +39,22 @@
         ]
 
         \myaddplot{red}{square}{lbs-200+dbs-200-1615542843.txt}
-        \myaddplot{red}{square}{lbs-200+dbs-200-1615542886.txt}
-        \myaddplot{red}{square}{lbs-200+dbs-200-1615542928.txt}
+        %\myaddplot{red}{square}{lbs-200+dbs-200-1615542886.txt}
+        %\myaddplot{red}{square}{lbs-200+dbs-200-1615542928.txt}
 
         \myaddplot{blue}{square}{lbs-200+dbs-50-1615541861.txt}
-        \myaddplot{blue}{square}{lbs-200+dbs-50-1615541957.txt}
-        \myaddplot{blue}{square}{lbs-200+dbs-50-1615542054.txt}
+        %\myaddplot{blue}{square}{lbs-200+dbs-50-1615541957.txt}
+        %\myaddplot{blue}{square}{lbs-200+dbs-50-1615542054.txt}
 
         \legend{
-            dev-bs=200 = 1 logical-bs,
-            dev-bs=200 = 1 logical-bs,
-            dev-bs=200 = 1 logical-bs,
-            dev-bs=50 = 1/4 logical-bs,
-            dev-bs=50 = 1/4 logical-bs,
-            dev-bs=50 = 1/4 logical-bs,
+            static cluster,
+            dynamic cluster,
+            %dev-bs=200 = 1 logical-bs,
+            %dev-bs=200 = 1 logical-bs,
+            %dev-bs=200 = 1 logical-bs,
+            %dev-bs=50 = 1/4 logical-bs,
+            %dev-bs=50 = 1/4 logical-bs,
+            %dev-bs=50 = 1/4 logical-bs,
         }
     \end{axis}
 \end{tikzpicture}

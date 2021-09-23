@@ -65,6 +65,9 @@ class ElasticCallback(ms.train.callback.Callback):
             print('_elastic_state stopped, requesting run_context to stop')
             run_context.request_stop()
 
+            d = self._elastic_state.get_duration_since_resize()
+            print('from resize start to after request stop: %dms' % (d / 1e6))
+
     def end(self, run_context):
         pass
         print('StopCallback::end')

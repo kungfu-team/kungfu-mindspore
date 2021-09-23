@@ -1,6 +1,7 @@
 # step -> cluster size
 
 max_step = 100
+# max_step = 10
 
 static_schedule = {
     # empty

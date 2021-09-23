@@ -18,9 +18,9 @@ from mindspore.train.callback import (CheckpointConfig, ModelCheckpoint,
                                       TimeMonitor, SummaryCollector,
                                       LossMonitor)
 from mindspore.train.serialization import load_checkpoint, load_param_into_net
+from mindspore.train.serialization import save_checkpoint
 from mindspore.common import set_seed
 from src.kungfu_mindspore_optimizer import KungFuLamb
-from mindspore_extension import StopCallback
 
 from src.parse_env import parse_kungfu_env
 from src.elastic_state import ElasticState, ElasticCallback
@@ -29,7 +29,7 @@ from kungfu.python.elastic import create_tf_records
 from kungfu.python import _init as kungfu_init
 from kungfu.python import current_rank, current_cluster_size, propose_new_size
 from mindspore._c_expression import kungfu_nccl_finalize, kungfu_nccl_init
-from schedule import schedule, ElasticScheduleCallback
+from schedule import elastic_schedule, ElasticScheduleCallback
 
 
 def log_pid(msg=''):
@@ -279,9 +279,10 @@ def run_squad():
     print(shard)
     print('local batch size: %d, dropped %d' % (batch_size, dropped))
     es = ElasticState(args_opt.max_progress - dropped, args_opt.reload)
+    schedule_cb = ElasticScheduleCallback(es, elastic_schedule)
     elastic_callbacks = [
         ElasticCallback(es, args_opt.global_batch_size),
-        ElasticScheduleCallback(es, schedule),
+        schedule_cb,
     ]
 
     progress = es._progress
@@ -346,7 +347,8 @@ def run_squad():
 
     kungfu_nccl_finalize()
     print('Train Finished!!!')
-    print('Train Finished!!!', file=sys.stderr)
+    if rank == 0:
+        save_checkpoint(netwithloss, "step-%d.ckpt" % (schedule_cb._step))
     return
 
 

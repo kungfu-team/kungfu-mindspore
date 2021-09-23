@@ -1,17 +1,28 @@
 # step -> cluster size
 
-schedule = {
-    10: 2,
-    20: 3,
-    30: 4,
-    40: 1,
-    50: 3,
-    60: 4,
-    70: 2,
-    80: 4,
-    90: 1,
-    100: 0,
+# max_step = 100
+max_step = 70
+
+static_schedule = {
+    # empty
+    max_step: 0,  # stop
 }
+
+elastic_schedule = {
+    10: 4,
+    20: 1,
+    30: 3,
+    40: 1,
+    50: 2,
+    60: 1,
+    # 70: 2,
+    # 80: 4,
+    # 90: 1,
+    max_step: 0,  # stop
+}
+
+import os
+import time
 
 import mindspore as ms
 from kungfu.python import current_rank, propose_new_size
@@ -37,11 +48,15 @@ class ElasticScheduleCallback(ms.train.callback.Callback):
         self._schedule = schedule
         self._rank = current_rank()
         self._step = 0
-        if self._rank == 0 and self._es._progress > 0:
+        if self._es._progress > 0:
+            # all ranks should read
             self._step = read_step(self._es)
 
         if self._rank == 0:
             print('starting from step %d' % (self._step))
+
+        self._proc_start = int(os.getenv('KUNGFU_PROC_START_TIMESTAMP'))
+        self._local_step = 0
 
     def begin(self, run_context):
         pass
@@ -56,8 +71,22 @@ class ElasticScheduleCallback(ms.train.callback.Callback):
         if self._rank == 0:
             print('running step %d' % (self._step))
 
+        if self._rank == 0 and self._local_step == 0:
+            d = time.time() - self._proc_start
+            print('first step BEGIN after reload took %.fs' % (d))
+
+        self._step_begin_ts = time.time()
+
     def step_end(self, run_context):
+        step_took = time.time() - self._step_begin_ts
+
         self._step += 1
+        self._local_step += 1
+        if self._rank == 0:
+            if self._local_step == 1:
+                d = time.time() - self._proc_start
+                print('first step END after reload took %.fs' % (d))
+            print('local step %d took %.fs' % (self._local_step, step_took))
 
         if self._step in self._schedule:
             if current_rank() == 0:
@@ -66,5 +95,6 @@ class ElasticScheduleCallback(ms.train.callback.Callback):
 
     def end(self, run_context):
         if self._rank == 0:
+            # only save from 0
             save_step(self._es, self._step)
             print('stopping at step %d' % (self._step))
