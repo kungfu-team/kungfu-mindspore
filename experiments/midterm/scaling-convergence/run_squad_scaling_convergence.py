@@ -28,7 +28,7 @@ from kungfu.python.elastic import create_tf_records
 from kungfu.python import _init as kungfu_init
 from kungfu.python import current_rank, current_cluster_size, propose_new_size
 from mindspore._c_expression import kungfu_nccl_finalize, kungfu_nccl_init
-from schedule import schedule, ElasticScheduleCallback
+from schedule import elastic_schedule, static_schedule, ElasticScheduleCallback
 
 
 def log_pid(msg=''):
@@ -234,6 +234,7 @@ def run_squad():
     parser.add_argument('--seed', type=int, default=0)
     parser.add_argument('--index-file', type=str, default='')
     parser.add_argument('--reload', action='store_true', default=True)
+    parser.add_argument('--elastic', action='store_true', default=True)
 
     args_opt = parser.parse_args()
     epoch_num = args_opt.epoch_num
@@ -282,6 +283,12 @@ def run_squad():
     print(shard)
     print('local batch size: %d, dropped %d' % (batch_size, dropped))
     es = ElasticState(args_opt.max_progress - dropped, args_opt.reload)
+
+    if args_opt.elastic:
+        schedule = elastic_schedule
+    else:
+        schedule = static_schedule
+
     schedule_cb = ElasticScheduleCallback(es, schedule)
     elastic_callbacks = [
         ElasticCallback(es, args_opt.global_batch_size),

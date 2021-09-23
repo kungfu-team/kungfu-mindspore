@@ -78,8 +78,6 @@ app_flags() {
     if [ "$reload" -eq 1 ]; then
         echo --reload
     fi
-
-    echo --elastic
 }
 
 # SCRIPT=log-env.py

@@ -1,6 +1,10 @@
 # step -> cluster size
 
-schedule = {
+static_schedule = {
+    # empty
+}
+
+elastic_schedule = {
     10: 2,
     20: 3,
     30: 4,
