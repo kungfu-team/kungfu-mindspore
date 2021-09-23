@@ -65,7 +65,7 @@ app_flags() {
     # echo --train_batch_size=8
     echo --eval_batch_size=1
     echo --vocab_file_path="/data/bert/vocab.txt"
-    echo --save_finetune_checkpoint_path="$ROOT/checkpoint"
+    echo --save_finetune_checkpoint_path="$SCRIPT_DIR/checkpoint"
     echo --load_pretrain_checkpoint_path="/data/bert/bert_base.ckpt"
     echo --train_data_file_path=${DATA_DIR}
     # echo --eval_json_path="/data/squad1/dev-v1.1.json"
@@ -83,6 +83,8 @@ app_flags() {
 SCRIPT=run_squad_scaling_convergence.py
 
 main() {
+    rm -fr checkpoint
+
     export KUNGFU_NO_AUTO_INIT=1
     $PYTHON -m kungfu.cmd.elastic_run $(kungfu_run_flags) \
         $PYTHON $SCRIPT $(app_flags)

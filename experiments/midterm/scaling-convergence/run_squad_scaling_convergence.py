@@ -18,10 +18,9 @@ from mindspore.train.callback import (CheckpointConfig, ModelCheckpoint,
                                       TimeMonitor, SummaryCollector,
                                       LossMonitor)
 from mindspore.train.serialization import load_checkpoint, load_param_into_net
+from mindspore.train.serialization import save_checkpoint
 from mindspore.common import set_seed
 from src.kungfu_mindspore_optimizer import KungFuLamb
-from mindspore_extension import StopCallback
-
 from src.parse_env import parse_kungfu_env
 from src.elastic_state import ElasticState, ElasticCallback
 
@@ -49,7 +48,6 @@ def do_train(elastic_callbacks,
              save_checkpoint_path="",
              epoch_num=1,
              distributed=False):
-    """ do train """
     if load_checkpoint_path == "":
         raise ValueError(
             "Pretrain model missed, finetune task must load pretrain model!")
@@ -101,31 +99,39 @@ def do_train(elastic_callbacks,
             "Optimizer not supported. support: [AdamWeightDecay, Lamb, Momentum]"
         )
 
-    # load checkpoint into network
-    ckpt_config = CheckpointConfig(save_checkpoint_steps=250,
-                                   keep_checkpoint_max=10)
-    #  ckpt_config = CheckpointConfig(save_checkpoint_steps=steps_per_epoch, keep_checkpoint_max=1)
+    ckpt_config = CheckpointConfig(
+        save_checkpoint_steps=250,
+        keep_checkpoint_max=10,
+    )
     ckpoint_cb = ModelCheckpoint(
         prefix="squad",
         directory=None if save_checkpoint_path == "" else save_checkpoint_path,
-        config=ckpt_config)
+        config=ckpt_config,
+    )
+
+    # load checkpoint into network
+    print('loading checkpoint from %s' % (load_checkpoint_path))
     param_dict = load_checkpoint(load_checkpoint_path)
     load_param_into_net(network, param_dict)
 
-    print('using optimizer: %s' % (optimizer))
-    update_cell = DynamicLossScaleUpdateCell(loss_scale_value=2**32,
-                                             scale_factor=2,
-                                             scale_window=1000)
-    netwithgrads = BertSquadCell(network,
-                                 optimizer=optimizer,
-                                 scale_update_cell=update_cell)
+    # print('using optimizer: %s' % (optimizer))
+    update_cell = DynamicLossScaleUpdateCell(
+        loss_scale_value=2**32,
+        scale_factor=2,
+        scale_window=1000,
+    )
+    netwithgrads = BertSquadCell(
+        network,
+        optimizer=optimizer,
+        scale_update_cell=update_cell,
+    )
     model = Model(netwithgrads)
     callbacks = [
         TimeMonitor(dataset.get_dataset_size()),
         LossCallBack(dataset.get_dataset_size()),
         ckpoint_cb,
     ]
-    """ callbacks """
+
     if distributed:
         # rank = kfops.kungfu_current_rank()
         rank = kf_env['rank']
@@ -231,9 +237,7 @@ def run_squad():
 
     args_opt = parser.parse_args()
     epoch_num = args_opt.epoch_num
-    load_pretrain_checkpoint_path = args_opt.load_pretrain_checkpoint_path
     save_finetune_checkpoint_path = args_opt.save_finetune_checkpoint_path
-    load_finetune_checkpoint_path = args_opt.load_finetune_checkpoint_path
 
     if args_opt.do_train.lower() == "false" and args_opt.do_eval.lower(
     ) == "false":
@@ -250,7 +254,6 @@ def run_squad():
         if args_opt.eval_json_path == "":
             raise ValueError(
                 "'tokenization_file_path' must be set when do evaluation task")
-    """ distributed """
     if args_opt.distribute.lower() == "true":
         distributed = True
     else:
@@ -279,17 +282,22 @@ def run_squad():
     print(shard)
     print('local batch size: %d, dropped %d' % (batch_size, dropped))
     es = ElasticState(args_opt.max_progress - dropped, args_opt.reload)
+    schedule_cb = ElasticScheduleCallback(es, schedule)
     elastic_callbacks = [
         ElasticCallback(es, args_opt.global_batch_size),
-        ElasticScheduleCallback(es, schedule),
+        schedule_cb,
     ]
 
     progress = es._progress
     rank = current_rank()
     size = current_cluster_size()
 
-    if progress == 0 and rank == 0:
-        propose_new_size(size)  # init config server
+    if progress == 0:
+        load_pretrain_checkpoint_path = args_opt.load_pretrain_checkpoint_path
+        if rank == 0:
+            propose_new_size(size)  # init config server
+    else:
+        load_pretrain_checkpoint_path = "step-%d.ckpt" % (schedule_cb._step)
 
     target = args_opt.device_target
     if target == "Ascend":
@@ -345,9 +353,9 @@ def run_squad():
         # print('kfops.finalize done')
 
     kungfu_nccl_finalize()
-    print('Train Finished!!!')
-    print('Train Finished!!!', file=sys.stderr)
-    return
+    print('Train Finished at step %d' % (schedule_cb._step))
+    if rank == 0:
+        save_checkpoint(netwithloss, "step-%d.ckpt" % (schedule_cb._step))
 
 
 if __name__ == "__main__":

@@ -16,6 +16,9 @@ def read_ckpt(filename):
 
 
 def main(filenames):
+    if len(filenames) == 0:
+        print('no files given!')
+
     for filename in filenames:
         print(filename)
         read_ckpt(filename)

@@ -1,6 +1,9 @@
 #!/bin/sh
 set -e
 
+PYTHON=$(which python3.7)
+echo "Using $PYTHON"
+
 export CUDA_VISIBLE_DEVICES=0,1,2,3
 # export CUDA_VISIBLE_DEVICES=2,3
 
@@ -59,6 +62,12 @@ export LD_LIBRARY_PATH=$(ld_library_path $PWD/mindspore)
 #############
 ### run tests
 # ./tests/run.sh
+
+read_checkpoints() {
+    $PYTHON $PWD/scripts/read-ckpt.py $@
+}
+
+# read_checkpoints /data/bert/bert_base.ckpt
 
 # ./backup/2021-09-20/run_squad_elastic.sh
 ./experiments/midterm/run-all.sh
