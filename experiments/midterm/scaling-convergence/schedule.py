@@ -1,7 +1,10 @@
 # step -> cluster size
 
+max_step = 100
+
 static_schedule = {
     # empty
+    max_step: 0,  # stop
 }
 
 elastic_schedule = {
@@ -14,7 +17,7 @@ elastic_schedule = {
     70: 2,
     80: 4,
     90: 1,
-    100: 0,
+    max_step: 0,  # stop
 }
 
 import os

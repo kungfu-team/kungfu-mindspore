@@ -233,8 +233,8 @@ def run_squad():
     parser.add_argument('--global-batch-size', type=int, default=1)
     parser.add_argument('--seed', type=int, default=0)
     parser.add_argument('--index-file', type=str, default='')
-    parser.add_argument('--reload', action='store_true', default=True)
-    parser.add_argument('--elastic', action='store_true', default=True)
+    parser.add_argument('--reload', action='store_true', default=False)
+    parser.add_argument('--elastic', action='store_true', default=False)
 
     args_opt = parser.parse_args()
     epoch_num = args_opt.epoch_num

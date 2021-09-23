@@ -93,6 +93,7 @@ main() {
     export KUNGFU_NO_AUTO_INIT=1
     $PYTHON -m kungfu.cmd.elastic_run $(kungfu_run_flags) \
         $PYTHON $SCRIPT $(app_flags)
+    sha1sum *.ckpt >single.sha1.txt
 }
 
 main
