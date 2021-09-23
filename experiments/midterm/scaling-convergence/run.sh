@@ -83,7 +83,11 @@ app_flags() {
 SCRIPT=run_squad_scaling_convergence.py
 
 main() {
+    rm -fr progress-*.log
     rm -fr checkpoint
+    rm -fr *.tf_record
+    rm -fr *.ckpt
+    rm -fr *.list.txt
 
     export KUNGFU_NO_AUTO_INIT=1
     $PYTHON -m kungfu.cmd.elastic_run $(kungfu_run_flags) \

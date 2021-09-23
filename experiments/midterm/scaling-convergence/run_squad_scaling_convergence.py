@@ -99,15 +99,15 @@ def do_train(elastic_callbacks,
             "Optimizer not supported. support: [AdamWeightDecay, Lamb, Momentum]"
         )
 
-    ckpt_config = CheckpointConfig(
-        save_checkpoint_steps=250,
-        keep_checkpoint_max=10,
-    )
-    ckpoint_cb = ModelCheckpoint(
-        prefix="squad",
-        directory=None if save_checkpoint_path == "" else save_checkpoint_path,
-        config=ckpt_config,
-    )
+    # ckpt_config = CheckpointConfig(
+    #     save_checkpoint_steps=250,
+    #     keep_checkpoint_max=10,
+    # )
+    # ckpoint_cb = ModelCheckpoint(
+    #     prefix="squad",
+    #     directory=None if save_checkpoint_path == "" else save_checkpoint_path,
+    #     config=ckpt_config,
+    # )
 
     # load checkpoint into network
     print('loading checkpoint from %s' % (load_checkpoint_path))
@@ -129,7 +129,7 @@ def do_train(elastic_callbacks,
     callbacks = [
         TimeMonitor(dataset.get_dataset_size()),
         LossCallBack(dataset.get_dataset_size()),
-        ckpoint_cb,
+        # ckpoint_cb,
     ]
 
     if distributed:
@@ -297,6 +297,7 @@ def run_squad():
         if rank == 0:
             propose_new_size(size)  # init config server
     else:
+        print('progress: %d, step: %d' % (progress, schedule_cb._step))
         load_pretrain_checkpoint_path = "step-%d.ckpt" % (schedule_cb._step)
 
     target = args_opt.device_target

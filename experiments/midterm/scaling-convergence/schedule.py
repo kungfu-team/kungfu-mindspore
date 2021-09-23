@@ -37,7 +37,8 @@ class ElasticScheduleCallback(ms.train.callback.Callback):
         self._schedule = schedule
         self._rank = current_rank()
         self._step = 0
-        if self._rank == 0 and self._es._progress > 0:
+        if self._es._progress > 0:
+            # all ranks should read
             self._step = read_step(self._es)
 
         if self._rank == 0:
@@ -66,5 +67,6 @@ class ElasticScheduleCallback(ms.train.callback.Callback):
 
     def end(self, run_context):
         if self._rank == 0:
+            # only save from 0
             save_step(self._es, self._step)
             print('stopping at step %d' % (self._step))
