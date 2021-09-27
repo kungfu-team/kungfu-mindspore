@@ -12,7 +12,8 @@ def single
 end
 
 def elastic
-  for i in 0..9
+  #for i in 0..9
+  for i in 0..0
     for line in extract_log("log/127.0.0.1.40000@#{i}.stdout.log").each_line
       line.strip!
       puts line
@@ -20,5 +21,5 @@ def elastic
   end
 end
 
-#single
-elastic
+single
+#elastic

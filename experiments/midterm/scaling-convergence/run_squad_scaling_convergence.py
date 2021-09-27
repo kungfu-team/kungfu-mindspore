@@ -83,8 +83,11 @@ def do_train(elastic_callbacks,
         lr_schedule = BertLearningRate(
             learning_rate=optimizer_cfg.Lamb.learning_rate,
             end_learning_rate=optimizer_cfg.Lamb.end_learning_rate,
-            warmup_steps=int(steps_per_epoch * epoch_num * 0.1),
-            decay_steps=steps_per_epoch * epoch_num,
+            # kungfu experiment: make constant
+            # warmup_steps=int(steps_per_epoch * epoch_num * 0.1),
+            # decay_steps=steps_per_epoch * epoch_num,
+            warmup_steps=0,
+            decay_steps=10000000,
             power=optimizer_cfg.Lamb.power)
         # optimizer = Lamb(network.trainable_params(), learning_rate=lr_schedule)
         optimizer = KungFuLamb(network.trainable_params(),
@@ -117,12 +120,15 @@ def do_train(elastic_callbacks,
     # print('using optimizer: %s' % (optimizer))
     update_cell = DynamicLossScaleUpdateCell(
         loss_scale_value=2**32,
-        scale_factor=2,
+        # kungfu experiment: make constant
+        # scale_factor=2,
+        scale_factor=1,
         scale_window=1000,
     )
     netwithgrads = BertSquadCell(
         network,
         optimizer=optimizer,
+        # kungfu experiment: make constant
         scale_update_cell=update_cell,
     )
     model = Model(netwithgrads)

@@ -5,7 +5,7 @@ from mindspore.common import dtype as mstype
 from mindspore.ops import composite as C
 from mindspore.ops import functional as F
 from mindspore.ops import operations as P
-from mindspore.ops.operations.kungfu_comm_ops import KungFuAllReduce
+from mindspore.ops.operations.kungfu_comm_ops import KungFuAllReduce, KungFuClusterSize
 
 cast = P.Cast()
 

@@ -1,6 +1,6 @@
 # step -> cluster size
 
-max_step = 100
+max_step = 200
 # max_step = 2
 
 static_schedule = {
@@ -9,7 +9,7 @@ static_schedule = {
 }
 
 elastic_schedule = {
-    50: 4,
+    # 25: 4,
     # 200: 3,
     # 300: 4,
     # 400: 1,

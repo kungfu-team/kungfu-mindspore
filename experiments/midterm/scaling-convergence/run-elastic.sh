@@ -28,7 +28,7 @@ mkdir -p ms_log
 CUR_DIR=$PWD
 export GLOG_log_dir=${CUR_DIR}/ms_log
 
-init_cluster_size=1
+init_cluster_size=4
 EPOCH_SIZE=1
 DATA_DIR="/data/squad1/train.tf_record"
 
