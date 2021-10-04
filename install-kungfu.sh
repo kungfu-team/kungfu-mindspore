@@ -60,4 +60,5 @@ install_kungfu() {
     ./deps/build.sh
 }
 
+git submodule update --init --recursive
 with_pwd install_kungfu
