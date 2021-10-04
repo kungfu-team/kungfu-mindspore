@@ -6,4 +6,4 @@
 	url = https://gist.github.com/996687e0276a70191ad81728999044f6.git
 [submodule "thirdparty/KungFu"]
 	path = thirdparty/KungFu
-	url = https://github.com/lgarithm/KungFu
+	url = https://github.com/lsds/KungFu
