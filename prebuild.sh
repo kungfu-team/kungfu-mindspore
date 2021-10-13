@@ -1,6 +1,9 @@
 #!/bin/sh
 set -e
 
+export CC=$(which gcc-7)
+export CXX=$(which g++-7)
+
 cd $(dirname $0)
 . ./scripts/measure.sh
 

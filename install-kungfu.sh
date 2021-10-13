@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 
-PYTHON=$(which python3.7)
+PYTHON=$(which python3)
 
 cd $(dirname $0)
 ROOT=$PWD
