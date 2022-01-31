@@ -23,5 +23,7 @@ git apply ../patches/$TAG/prebuild/*.patch
 
 CUDA_HOME=/usr/local/cuda
 export CUDACXX=$CUDA_HOME/bin/nvcc
+export CXX=$(which g++-7)
+export CC=$(which gcc-7)
 
 measure ./build.sh -e gpu
